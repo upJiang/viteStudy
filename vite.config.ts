@@ -4,7 +4,7 @@ import { normalizePath } from 'vite';
 import path from 'path';
 import viteEslint from 'vite-plugin-eslint'; // vite eslint插件
 import autoprefixer from 'autoprefixer';
-
+import viteStylelint from '@amatlash/vite-plugin-stylelint';
 
 // 全局 scss 文件的路径
 // 用 normalizePath 解决 window 下的路径问题
@@ -14,7 +14,14 @@ const variablePath = normalizePath(path.resolve('./src/style/variable.scss'));
 export default defineConfig({
   // 手动指定项目根目录位置
   // root: path.join(__dirname, 'src')
-  plugins: [react(), viteEslint()],
+  plugins: [
+    react(),
+    viteEslint(),
+    viteStylelint({
+      // 对某些文件排除检查
+      exclude: /windicss|node_modules/
+    })
+  ],
   // css 相关的配置
   css: {
     // 进行 PostCSS 配置
@@ -37,5 +44,14 @@ export default defineConfig({
         additionalData: `@import "${variablePath}";`
       }
     }
+  },
+  resolve: {
+    // 路径别名配置
+    alias: [
+      {
+        find: '@',
+        replacement: path.resolve(__dirname, 'src')
+      }
+    ]
   }
 });
