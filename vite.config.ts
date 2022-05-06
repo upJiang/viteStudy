@@ -9,6 +9,13 @@ import svgr from 'vite-plugin-svgr'; // svg 插件
 import viteImagemin from 'vite-plugin-imagemin'; // 图片压缩插件
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'; // 合并svg图片请求，雪碧图插件
 
+// 自定义插件
+import testHookPlugin from './plugins/test-hooks-plugin';
+import virtual from './plugins/virtual-module';
+
+// 插件调试工具
+import inspect from 'vite-plugin-inspect';
+
 // 全局 scss 文件的路径
 // 用 normalizePath 解决 window 下的路径问题
 const variablePath = normalizePath(path.resolve('./src/style/variable.scss'));
@@ -56,7 +63,10 @@ export default defineConfig({
     // 雪碧图配置
     createSvgIconsPlugin({
       iconDirs: [path.join(__dirname, 'src/assets/icons')]
-    })
+    }),
+    testHookPlugin(),
+    virtual(),
+    inspect()
   ],
   // css 相关的配置
   css: {
